@@ -1,0 +1,6 @@
+---
+name: geolite2
+---
+
+RevStrat\AgeGate\GeoLite2:
+  database: "/../data/GeoLite2-Country.mmdb"

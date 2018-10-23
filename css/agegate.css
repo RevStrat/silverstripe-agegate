@@ -1,0 +1,22 @@
+.AgeGate {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 99999;
+    background: white;
+    text-align: center;
+    overflow: scroll-y;
+}
+
+.AgeGate .overlay {
+    position: absolute;
+    padding: 1em;
+    width: 500px;
+    max-width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    background: white;
+}

@@ -1,0 +1,30 @@
+{
+    "name": "RevStrat/silverstripe-agegate",
+    "description": "Adds age-gate for verifying visitor's eligibility to view restricted content",
+    "keywords": ["age", "agegate", "gate", "silverstripe"],
+    "type": "silverstripe-vendormodule",
+    "homepage": "https://github.com/RevStrat/silverstripe-agegate",
+    "license": "BSD-3-Clause",
+    "authors": [{
+        "name": "Rob Rankin",
+        "email": "rob@revolutionstrategy.com"
+    }],
+    "require": {
+        "silverstripe/framework": ">=4.0",
+        "geoip2/geoip2": "~2.0"
+    },
+    "extra": {
+        "installer-name": "agegate",
+        "expose": [
+            "css",
+            "javascript"
+        ]
+    },
+    "autoload": {
+        "psr-4": {
+            "RevStrat\\silverstripe-agegate\\": "src"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
