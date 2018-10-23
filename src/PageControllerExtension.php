@@ -7,11 +7,9 @@ use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\CheckboxField;
-use SilverStripe\Control\Cookie;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\View\Requirements;
 use Silverstripe\SiteConfig\SiteConfig;
 
 class PageControllerExtension extends DataExtension {
