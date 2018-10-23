@@ -1,5 +1,5 @@
 {
-    "name": "RevStrat/silverstripe-agegate",
+    "name": "revstrat/silverstripe-agegate",
     "description": "Adds age-gate for verifying visitor's eligibility to view restricted content",
     "keywords": ["age", "agegate", "gate", "silverstripe"],
     "type": "silverstripe-vendormodule",
