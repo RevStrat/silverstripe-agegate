@@ -29,3 +29,5 @@ The IPStack interface makes use of two environment variables:
 The IPSTACK_ENDPOINT key points to the endpoint URL and is parsed with sprintf. Update this to a compatible service (such as Nekudo) or change the protocol (paid accounts on IPStack can use https for lookups). The IPSTACK\_ACCESS\_KEY should be set to your access key.
 
 Once everything is configured, be sure to run ```/dev/build?flush=all```.
+
+Configure age restriction by country under Settings > Age Gate Control.
