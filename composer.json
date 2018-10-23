@@ -22,7 +22,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RevStrat\\silverstripe-agegate\\": "src"
+            "revstrat\\silverstripe-agegate\\": "src"
         }
     },
     "minimum-stability": "dev",
