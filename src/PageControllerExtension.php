@@ -81,7 +81,6 @@ class PageControllerExtension extends DataExtension {
                     throw new Exception('Could net get IP address from request. Falling back on age gate defaults.');
                 }
                 $resolverClass = $this->config()->geoip_source;
-                error_log($resolverClass);
                 $resolver = new $resolverClass;
                 $this->countryCode = $resolver->IP2CountryCode($ip);
                 $session->set($this->config()->storage_key, json_encode([
