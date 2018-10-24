@@ -31,3 +31,31 @@ The IPSTACK_ENDPOINT key points to the endpoint URL and is parsed with sprintf. 
 Once everything is configured, be sure to run ```/dev/build?flush=all```.
 
 Configure age restriction by country under Settings > Age Gate Control.
+
+## Overiding the form
+
+Implement these methods on your PageController. These methods are an example of how one might use two buttons on the age gate.
+
+```
+public function updateGetShowAgeGate(&$ageGateActive, &$sufficientAge) {
+        
+    }
+
+    public function updateAgeGateForm(&$fields, &$actions, $minimumAge) {
+    	$fields->removeByName('OfAge');
+    	$actions = new FieldList(
+    		FormAction::create('passAgeGate')->setTitle("Yes I'm over $minimumAge"),
+    		FormAction::create('failAgeGate')->setTitle("I'm not $minimumAge yet")
+    	);
+    }
+
+    public function passAgeGate($data, Form $form) {
+    	$data['OfAge'] = true;
+    	return $this->doAgeGate($data, $form);
+    }
+
+    public function failAgeGate($data, Form $form) {
+    	$data["OfAge"] = false;
+    	return $this->doAgeGate($data, $form);
+    }
+```
