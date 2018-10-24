@@ -2,6 +2,7 @@
 
 namespace RevStrat\AgeGate;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
@@ -13,7 +14,8 @@ use SilverStripe\ORM\DataObject;
 class CountryAgeGateConfig extends DataExtension {
     private static $db = [
         'AgeGateContent' => 'HTMLText',
-        'AccessDeniedURL' => 'Varchar(512)'
+        'AccessDeniedURL' => 'Varchar(512)',
+        'GlobalAgeGate' => 'Boolean'
     ];
 
     private static $has_many = [
@@ -21,6 +23,7 @@ class CountryAgeGateConfig extends DataExtension {
     ];
 
     public function updateCMSFields(FieldList $fields) {
+        $fields->addFieldToTab('Root.AgeGateControl', CheckboxField::create('GlobalAgeGate', 'Activate age gate for all pages'));
         $fields->addFieldToTab('Root.AgeGateControl', HTMLEditorField::create('AgeGateContent', 'Age Gate Content'));
         $fields->addFieldToTab('Root.AgeGateControl', TextField::create('AccessDeniedURL', 'Redirect for access denied'));
         $fields->addFieldToTab('Root.AgeGateControl', new GridField('AgeGateCountries', 'Age Gate Countries', AgeGateCountry::get(), GridFieldConfig_RecordEditor::create()));

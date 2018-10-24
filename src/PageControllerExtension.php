@@ -100,11 +100,15 @@ class PageControllerExtension extends DataExtension {
     }
 
     public function GetShowAgeGate() {
-        if (!$this->owner->AgeGated) {
-            return false;
+        $config = SiteConfig::current_site_config();
+        $ageGateActive = $this->owner->AgeGated || $config->GlobalAgeGate;
+        $sufficientAge = $this->confirmedAge >= $this->minimumAge;
+
+        if (method_exists($this->owner, 'updateGetShowAgeGate')) {
+            $this->owner->updateGetShowAgeGate($ageGateActive, $sufficientAge);
         }
 
-        if ($this->confirmedAge >= $this->minimumAge) {
+        if (!$ageGateActive || $sufficientAge) {
             return false;
         }
 
@@ -129,6 +133,10 @@ class PageControllerExtension extends DataExtension {
         $actions = new FieldList(
             FormAction::create('doAgeGate')->setTitle($this->config()->submit_label)
         );
+
+        if (method_exists($this->owner, 'updateAgeGateForm')) {
+            $this->owner->updateAgeGateForm($fields, $actions, $this->minimumAge);
+        }
 
         $form = new Form($this->owner, 'AgeGateForm', $fields, $actions);
 
