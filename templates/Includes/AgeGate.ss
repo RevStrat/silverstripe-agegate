@@ -11,6 +11,6 @@
         </div>
     </div>
 </div>
-<% require css("RevStrat/silverstripe-agegate:css/agegate.css") %>
-<% require javascript("RevStrat/silverstripe-agegate:javascript/agegate.js") %>
+<% require css("revstrat/silverstripe-agegate:css/agegate.css") %>
+<% require javascript("revstrat/silverstripe-agegate:javascript/agegate.js") %>
 <% end_if %>
