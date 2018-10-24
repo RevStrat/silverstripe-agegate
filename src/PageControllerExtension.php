@@ -11,6 +11,7 @@ use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Injector\Injector;
 use Silverstripe\SiteConfig\SiteConfig;
+use Jaybizzle\CrawlerDetect\CrawlerDetect;
 
 class PageControllerExtension extends DataExtension {
     use Configurable;
@@ -100,6 +101,11 @@ class PageControllerExtension extends DataExtension {
     }
 
     public function GetShowAgeGate() {
+        $CrawlerDetect = new CrawlerDetect;
+        if($CrawlerDetect->isCrawler()) {
+            return false; // Don't age-gate crawlers
+        }
+        
         $config = SiteConfig::current_site_config();
         $ageGateActive = $this->owner->AgeGated || $config->GlobalAgeGate;
         $sufficientAge = $this->confirmedAge >= $this->minimumAge;
