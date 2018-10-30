@@ -51,7 +51,8 @@ class PageControllerExtension extends DataExtension {
 
     public function onAfterInit() {
         // If we have an age gate and no session, get the party started
-        if (!$this->owner->AgeGated) {
+        $config = SiteConfig::current_site_config();
+        if (!$this->owner->AgeGated && !$config->GlobalAgeGate) {
             return;
         }
 
