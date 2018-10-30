@@ -74,7 +74,7 @@ class PageControllerExtension extends DataExtension {
             }
         }
         
-        if (!$this->minimumAge && !$this->countryCode) {
+        if (!$this->minimumAge && !$this->countryCode && AgeGateCountry::get()->count() > 0) {
             // No minimum age is set - perform GeoIP
             try {
                 $ip = $request->getIP();
