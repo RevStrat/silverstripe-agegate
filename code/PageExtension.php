@@ -1,20 +1,12 @@
 <?php
 
-namespace RevStrat\AgeGate;
-use SilverStripe\ORM\DataExtension;
-use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\CheckboxField;
-use SilverStripe\Forms\NumericField;
-use SilverStripe\Forms\TextField;
-use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
-
 class PageExtension extends DataExtension {
-    private static $db = [
+    private static $db = array(
         'AgeGated' => 'Boolean',
         'MinimumAgeOverrride' => 'Int',
         'AccessDeniedURLOverride' => 'Varchar(512)',
         'AgeGateContentOverride' => 'HTMLText'
-    ];
+    );
 
     public function updateCMSFields(FieldList $fields) {
         $fields->addFieldToTab('Root.AgeGateControl', CheckboxField::create('AgeGated', 'Age gated'));

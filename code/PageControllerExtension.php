@@ -1,21 +1,8 @@
 <?php
 
-namespace RevStrat\AgeGate;
-
-use SilverStripe\ORM\DataExtension;
-use SilverStripe\Forms\Form;
-use SilverStripe\Forms\FormAction;
-use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\CheckboxField;
-use SilverStripe\Control\HTTPRequest;
-use SilverStripe\Core\Config\Configurable;
-use SilverStripe\Core\Injector\Injector;
-use Silverstripe\SiteConfig\SiteConfig;
 use Jaybizzle\CrawlerDetect\CrawlerDetect;
 
 class PageControllerExtension extends DataExtension {
-    use Configurable;
-
     /**
      * @config
      */
@@ -39,11 +26,11 @@ class PageControllerExtension extends DataExtension {
     /**
      * @config
      */
-    private static $geoip_source = "RevStrat\\AgeGate\\IPStack";
+    private static $geoip_source = "IPStack";
 
-    private static $allowed_actions = [
+    private static $allowed_actions = array(
         'AgeGateForm'
-    ];
+    );
 
     private $confirmedAge = NULL;
     private $minimumAge = NULL;
@@ -51,14 +38,14 @@ class PageControllerExtension extends DataExtension {
 
     public function onAfterInit() {
         // If we have an age gate and no session, get the party started
-        if (!$this->owner->AgeGated) {
+        $config = SiteConfig::current_site_config(); 
+        if (!$this->owner->AgeGated && !$config->GlobalAgeGate) {
             return;
         }
 
         // Check if we've already saved this information in the session
-        $request = Injector::inst()->get(HTTPRequest::class);
-        $session = $request->getSession();
-        $clientSettings = json_decode($session->get($this->config()->storage_key));
+        $request = Controller::curr()->getRequest();
+        $clientSettings = json_decode(Session::get($this->owner->config()->storage_key));
 
         // We have an override set - use this.
         if ($this->owner->MinimumAgeOverrride) {
@@ -81,10 +68,10 @@ class PageControllerExtension extends DataExtension {
                 if (!$ip) {
                     throw new Exception('Could net get IP address from request. Falling back on age gate defaults.');
                 }
-                $resolverClass = $this->config()->geoip_source;
+                $resolverClass = $this->owner->config()->geoip_source;
                 $resolver = new $resolverClass;
                 $this->countryCode = $resolver->IP2CountryCode($ip);
-                $session->set($this->config()->storage_key, json_encode([
+                Session::set($this->owner->config()->storage_key, json_encode([
                     'ConfirmedAge' => $this->confirmedAge,
                     'CountryCode' => $this->countryCode
                 ]));
@@ -96,7 +83,7 @@ class PageControllerExtension extends DataExtension {
 
         // Still no age set, fall back to default
         if (!$this->minimumAge) {
-            $this->minimumAge = $this->config()->default_age;
+            $this->minimumAge = $this->owner->config()->default_age;
         }
     }
 
@@ -133,11 +120,11 @@ class PageControllerExtension extends DataExtension {
 
     public function AgeGateForm() {
         $fields = new FieldList(
-            CheckboxField::create('OfAge', sprintf($this->config()->checkbox_label, $this->minimumAge))
+            CheckboxField::create('OfAge', sprintf($this->owner->config()->checkbox_label, $this->minimumAge))
         );
 
         $actions = new FieldList(
-            FormAction::create('doAgeGate')->setTitle($this->config()->submit_label)
+            FormAction::create('doAgeGate')->setTitle($this->owner->config()->submit_label)
         );
 
         if (method_exists($this->owner, 'updateAgeGateForm')) {
@@ -150,11 +137,10 @@ class PageControllerExtension extends DataExtension {
     }
 
     public function doAgeGate($data, Form $form) {
-        $request = Injector::inst()->get(HTTPRequest::class);
-        $session = $request->getSession();
+        $request = $this->owner->getRequest();
         $ajax = $request->isAjax();
         if (array_key_exists('OfAge', $data) && $data['OfAge']) {
-            $session->set($this->config()->storage_key, json_encode([
+            Session::set($this->owner->config()->storage_key, json_encode([
                 'ConfirmedAge' => $this->minimumAge,
                 'CountryCode' => $this->countryCode
             ]));
@@ -176,7 +162,7 @@ class PageControllerExtension extends DataExtension {
         }
 
         if ($ajax) {
-            return json_encode(['success' => true]);
+            return json_encode(array('success' => true));
         }
 
         $this->owner->redirectBack();

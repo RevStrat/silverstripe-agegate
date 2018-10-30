@@ -2,17 +2,17 @@
 name: agegate
 ---
 
-SilverStripe\CMS\Controllers\ContentController:
+ContentController:
   extensions:
-    - RevStrat\AgeGate\PageControllerExtension
-SilverStripe\CMS\Model\SiteTree:
+    - PageControllerExtension
+SiteTree:
   extensions:
-    - RevStrat\AgeGate\PageExtension
-SilverStripe\SiteConfig\SiteConfig:
+    - PageExtension
+SiteConfig:
   extensions:
-    - RevStrat\AgeGate\CountryAgeGateConfig
-RevStrat\AgeGate\PageExtension:
+    - CountryAgeGateConfig
+Page:
   default_age: 19
-RevStrat\AgeGate\PageControllerExtension:
-  geoip_source: "RevStrat\\AgeGate\\IPStack"
-  #geoip_source: "RevStrat\\AgeGate\\GeoLite2"
+PageController:
+  geoip_source: "IPStack"
+  #geoip_source: "GeoLite2"
