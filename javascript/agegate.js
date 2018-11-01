@@ -21,7 +21,11 @@ $(form).submit(function(e) {
         if (result.success) {
             $('.AgeGate').fadeOut();
         } else {
-            window.location = result.redirect;
+            if (!result.redirect && result.message) {
+                $('.AgeGate .content').append(result.message);
+            } else {
+                window.location = result.redirect;
+            }
         }
     });
 });

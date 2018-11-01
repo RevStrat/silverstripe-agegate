@@ -1,4 +1,4 @@
-<% if ShowAgeGate %>
+<% if ShowAgeGate && URLSegment != Security %>
 <div class="AgeGate">
     <div class="overlay">
         <div class="content">

@@ -166,7 +166,8 @@ class PageControllerExtension extends DataExtension {
                     'success'  => false,
                     'redirect' => $this->owner->AccessDeniedURLOverride ? 
                                     $this->owner->AccessDeniedURLOverride :
-                                    $config->AccessDeniedURL 
+                                    $config->AccessDeniedURL,
+                    'message' => $config->RedirectMessage 
                 ]);
             } else {
                 $this->owner->redirect($this->owner->AccessDeniedURLOverride ? 

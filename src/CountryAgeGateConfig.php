@@ -15,7 +15,8 @@ class CountryAgeGateConfig extends DataExtension {
     private static $db = [
         'AgeGateContent' => 'HTMLText',
         'AccessDeniedURL' => 'Varchar(512)',
-        'GlobalAgeGate' => 'Boolean'
+        'GlobalAgeGate' => 'Boolean',
+        'RedirectMessage' => 'HTMLText'
     ];
 
     private static $has_many = [
@@ -26,6 +27,7 @@ class CountryAgeGateConfig extends DataExtension {
         $fields->addFieldToTab('Root.AgeGateControl', CheckboxField::create('GlobalAgeGate', 'Activate age gate for all pages'));
         $fields->addFieldToTab('Root.AgeGateControl', HTMLEditorField::create('AgeGateContent', 'Age Gate Content'));
         $fields->addFieldToTab('Root.AgeGateControl', TextField::create('AccessDeniedURL', 'Redirect for access denied'));
+        $fields->addFieldToTab('Root.AgeGateControl', HTMLEditorField::create('RedirectMessage', 'Message to show if no redirect is present'));
         $fields->addFieldToTab('Root.AgeGateControl', new GridField('AgeGateCountries', 'Age Gate Countries', AgeGateCountry::get(), GridFieldConfig_RecordEditor::create()));
     }
 }
