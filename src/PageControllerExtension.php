@@ -134,11 +134,11 @@ class PageControllerExtension extends DataExtension {
 
     public function AgeGateForm() {
         $fields = new FieldList(
-            CheckboxField::create('OfAge', sprintf($this->config()->checkbox_label, $this->minimumAge))
+            CheckboxField::create('OfAge', sprintf(_t('AgeGate.CHECKBOX_LABEL', $this->config()->checkbox_label), $this->minimumAge))
         );
 
         $actions = new FieldList(
-            FormAction::create('doAgeGate')->setTitle($this->config()->submit_label)
+            FormAction::create('doAgeGate')->setTitle(_t('AgeGate.SUBMIT_LABEL', $this->config()->submit_label))
         );
 
         if (method_exists($this->owner, 'updateAgeGateForm')) {
