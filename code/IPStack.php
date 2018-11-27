@@ -7,7 +7,6 @@ class IPStack implements GeoIPServiceInterface {
         $ch = curl_init($endpoint);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $json = curl_exec($ch);
-        var_dump($json);
         curl_close($ch);
         $api_result = json_decode($json, true);
         return $api_result['country_code'];
