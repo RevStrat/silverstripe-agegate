@@ -127,7 +127,7 @@ class PageControllerExtension extends DataExtension {
             FormAction::create('doAgeGate')->setTitle($this->owner->config()->submit_label)
         );
 
-        $requiredFields = new FieldList();
+        $requiredFields = new RequiredFields();
 
         if (method_exists($this->owner, 'updateAgeGateForm')) {
             $this->owner->updateAgeGateForm($fields, $requiredFields, $actions, $this->minimumAge);
