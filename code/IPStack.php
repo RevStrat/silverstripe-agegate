@@ -2,6 +2,9 @@
 
 class IPStack implements GeoIPServiceInterface {
     public function IP2CountryCode($ip) {
+        if (!defined('IPSTACK_ACCESS_KEY')) {
+            return null;
+        }
         $access_key = IPSTACK_ACCESS_KEY;
         $endpoint = sprintf(IPSTACK_ENDPOINT, $ip, $access_key);
         $ch = curl_init($endpoint);
