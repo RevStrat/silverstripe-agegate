@@ -12,6 +12,7 @@ use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Injector\Injector;
 use Silverstripe\SiteConfig\SiteConfig;
 use Jaybizzle\CrawlerDetect\CrawlerDetect;
+use SilverStripe\Control\Cookie;
 
 class PageControllerExtension extends DataExtension {
     use Configurable;
@@ -39,6 +40,11 @@ class PageControllerExtension extends DataExtension {
     /**
      * @config
      */
+    private static $cookies_only = false;
+
+    /**
+     * @config
+     */
     private static $geoip_source = "RevStrat\\AgeGate\\IPStack";
 
     private static $allowed_actions = [
@@ -58,8 +64,12 @@ class PageControllerExtension extends DataExtension {
 
         // Check if we've already saved this information in the session
         $request = Injector::inst()->get(HTTPRequest::class);
-        $session = $request->getSession();
-        $clientSettings = json_decode($session->get($this->config()->storage_key));
+        if ($this->config()->cookies_only) {
+            $clientSettings = json_decode(Cookie::get('agegate-session'));
+        } else {
+            $session = $request->getSession();
+            $clientSettings = json_decode($session->get($this->config()->storage_key));
+        }
 
         // We have an override set - use this.
         if ($this->owner->MinimumAgeOverrride) {
@@ -85,10 +95,17 @@ class PageControllerExtension extends DataExtension {
                 $resolverClass = $this->config()->geoip_source;
                 $resolver = new $resolverClass;
                 $this->countryCode = $resolver->IP2CountryCode($ip);
-                $session->set($this->config()->storage_key, json_encode([
-                    'ConfirmedAge' => $this->confirmedAge,
-                    'CountryCode' => $this->countryCode
-                ]));
+                if ($this->config()->cookies_only) {
+                    Cookie::set('agegate-session', json_encode([
+                        'ConfirmedAge' => $this->confirmedAge,
+                        'CountryCode' => $this->countryCode
+                    ]));
+                } else {
+                    $session->set($this->config()->storage_key, json_encode([
+                        'ConfirmedAge' => $this->confirmedAge,
+                        'CountryCode' => $this->countryCode
+                    ]));
+                }
                 $this->minimumAge = $this->AgeForCountryCode($this->countryCode);
             } catch (Exception $lookupError) {
                 // Lookup failed. If we need to track this, insert code here
@@ -165,10 +182,17 @@ class PageControllerExtension extends DataExtension {
         $session = $request->getSession();
         $ajax = $request->isAjax();
         if (array_key_exists('OfAge', $data) && $data['OfAge']) {
-            $session->set($this->config()->storage_key, json_encode([
-                'ConfirmedAge' => $this->minimumAge,
-                'CountryCode' => $this->countryCode
-            ]));
+            if ($this->config()->cookies_only) {
+                Cookie::set('agegate-session', json_encode([
+                    'ConfirmedAge' => $this->minimumAge,
+                    'CountryCode' => $this->countryCode
+                ]));
+            } else {
+                $session->set($this->config()->storage_key, json_encode([
+                    'ConfirmedAge' => $this->minimumAge,
+                    'CountryCode' => $this->countryCode
+                ]));
+            }
         } else {
             $config = SiteConfig::current_site_config();
             if ($ajax) {
