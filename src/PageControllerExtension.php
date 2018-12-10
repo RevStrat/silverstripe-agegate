@@ -75,7 +75,7 @@ class PageControllerExtension extends DataExtension {
             }
         }
         
-        if (!$this->minimumAge && !$this->countryCode && AgeGateCountry::get()->count() > 0) {
+        if (!$this->countryCode && AgeGateCountry::get()->count() > 0) {
             // No minimum age is set - perform GeoIP
             try {
                 $ip = $request->getIP();
@@ -95,6 +95,10 @@ class PageControllerExtension extends DataExtension {
             }
         }
 
+        if ($this->countryCode && !$this->minimumAge) {
+            $this->minimumAge = $this->AgeForCountryCode($this->countryCode);
+        }
+
         // Still no age set. Either fall back on default or don't show the age gate
         if (!$this->minimumAge) {
             $this->minimumAge = $this->config()->default_age;
@@ -110,7 +114,7 @@ class PageControllerExtension extends DataExtension {
         $config = SiteConfig::current_site_config();
         $ageGateActive = $this->owner->AgeGated || $config->GlobalAgeGate;
 
-        // If the minimum age is 0, then anyone can access
+        // If the minimum age is 0, then anyone can access outside specified countries
         if ($this->minimumAge == 0) {
             $sufficientAge = true;
         } else {
