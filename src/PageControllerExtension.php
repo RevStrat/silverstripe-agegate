@@ -95,7 +95,7 @@ class PageControllerExtension extends DataExtension {
             }
         }
 
-        // Still no age set, fall back to default
+        // Still no age set. Either fall back on default or don't show the age gate
         if (!$this->minimumAge) {
             $this->minimumAge = $this->config()->default_age;
         }
@@ -109,7 +109,13 @@ class PageControllerExtension extends DataExtension {
         
         $config = SiteConfig::current_site_config();
         $ageGateActive = $this->owner->AgeGated || $config->GlobalAgeGate;
-        $sufficientAge = $this->confirmedAge >= $this->minimumAge;
+
+        // If the minimum age is 0, then anyone can access
+        if ($this->minimumAge == 0) {
+            $sufficientAge = true;
+        } else {
+            $sufficientAge = $this->confirmedAge >= $this->minimumAge;
+        }
 
         if (method_exists($this->owner, 'updateGetShowAgeGate')) {
             $this->owner->updateGetShowAgeGate($ageGateActive, $sufficientAge);
