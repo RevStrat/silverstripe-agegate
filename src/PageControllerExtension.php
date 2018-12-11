@@ -76,7 +76,7 @@ class PageControllerExtension extends DataExtension {
             $this->minimumAge = $this->owner->MinimumAgeOverrride;
         }
 
-        if ($clientSettings) 
+        if ($clientSettings) {
             if (property_exists($clientSettings, 'ConfirmedAge')) {
                 $this->confirmedAge = $clientSettings->ConfirmedAge;
             }
@@ -84,7 +84,7 @@ class PageControllerExtension extends DataExtension {
                 $this->countryCode = $clientSettings->CountryCode;
             }
         }
-        
+
         if (!$this->countryCode && AgeGateCountry::get()->count() > 0) {
             // No minimum age is set - perform GeoIP
             try {
@@ -113,7 +113,7 @@ class PageControllerExtension extends DataExtension {
         }
 
         if ($this->countryCode && !$this->minimumAge) {
-            $this->minimumAge = $this->AgeForCountryCode($this->countryCode)
+            $this->minimumAge = $this->AgeForCountryCode($this->countryCode);
         }
 
         // Still no age set. Either fall back on default or don't show the age gate
