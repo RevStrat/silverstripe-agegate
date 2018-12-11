@@ -72,11 +72,11 @@ class PageControllerExtension extends DataExtension {
         }
 
         // We have an override set - use this.
-        if ($this->owner->MinimumAgeOverrride) {
+        if ($this->owner->MinimumAgeOverrride > 0) {
             $this->minimumAge = $this->owner->MinimumAgeOverrride;
         }
 
-        if ($clientSettings) {
+        if ($clientSettings) 
             if (property_exists($clientSettings, 'ConfirmedAge')) {
                 $this->confirmedAge = $clientSettings->ConfirmedAge;
             }
@@ -113,7 +113,7 @@ class PageControllerExtension extends DataExtension {
         }
 
         if ($this->countryCode && !$this->minimumAge) {
-            $this->minimumAge = $this->AgeForCountryCode($this->countryCode);
+            $this->minimumAge = $this->AgeForCountryCode($this->countryCode)
         }
 
         // Still no age set. Either fall back on default or don't show the age gate
