@@ -7,7 +7,7 @@
     z-index: 99999;
     background: white;
     text-align: center;
-    overflow: scroll-y;
+    overflow-y: scroll;
 }
 
 .AgeGate .overlay {
