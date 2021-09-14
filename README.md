@@ -2,6 +2,10 @@
 
 This module provides an age-gate function, with support for the IPStack API or GeoLite2 database. Please provide your own GeoLite2 database in the ```data``` folder.
 
+# Important Notice
+
+This plugin is no longer maintained. If you wish to take over maintenance, please reach out and I'll be happy to transfer.
+
 ### Installation
 
 composer require revstrat/silverstripe-agegate
